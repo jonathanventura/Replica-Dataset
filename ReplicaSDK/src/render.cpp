@@ -132,7 +132,7 @@ int main(int argc, char* argv[]) {
     render.Download(image.ptr, GL_RGB, GL_UNSIGNED_BYTE);
 
     char filename[1000];
-    snprintf(filename, 1000, "frame%06zu.jpg", i);
+    snprintf(filename, 1000, "frame%06zu.png", i);
 
     pangolin::SaveImage(
         image.UnsafeReinterpret<uint8_t>(),
