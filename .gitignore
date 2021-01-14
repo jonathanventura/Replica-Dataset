@@ -1,3 +1,6 @@
 build
 *~
 *.swp
+replica_dir
+replica_dir/
+replica_v1_0.tar.gz.*
