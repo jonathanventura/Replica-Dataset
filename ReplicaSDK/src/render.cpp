@@ -9,36 +9,40 @@
 //added for safety
 #include <pangolin/display/opengl_render_state.h>
 
-
-
 // added for convenience
+#ifdef HAVE_GLES
+    typedef float GLprecision;
+#else
+    typedef double GLprecision;
+#endif
+
 class CameraPose{
 
   public:
-    pangolin::GLPrecision ex, ey, ez, lx, ly, lz, ux, uy, uz;
+    GLPrecision ex, ey, ez, lx, ly, lz, ux, uy, uz;
     CameraPose(
-        pangolin::GLPrecision e_x, 
-        pangolin::GLPrecision e_y, 
-        pangolin::GLPrecision e_z, 
-        pangolin::GLPrecision l_x, 
-        pangolin::GLPrecision l_y, 
-        pangolin::GLPrecision l_z, 
-        pangolin::GLPrecision u_x, 
-        pangolin::GLPrecision u_y, 
-        pangolin::GLPrecision u_z);
+        GLPrecision e_x, 
+        GLPrecision e_y, 
+        GLPrecision e_z, 
+        GLPrecision l_x, 
+        GLPrecision l_y, 
+        GLPrecision l_z, 
+        GLPrecision u_x, 
+        GLPrecision u_y, 
+        GLPrecision u_z);
     
 };
 
 CameraPose::CameraPose(
-        pangolin::GLPrecision e_x, 
-        pangolin::GLPrecision e_y, 
-        pangolin::GLPrecision e_z, 
-        pangolin::GLPrecision l_x, 
-        pangolin::GLPrecision l_y, 
-        pangolin::GLPrecision l_z, 
-        pangolin::GLPrecision u_x, 
-        pangolin::GLPrecision u_y, 
-        pangolin::GLPrecision u_z)
+        GLPrecision e_x, 
+        GLPrecision e_y, 
+        GLPrecision e_z, 
+        GLPrecision l_x, 
+        GLPrecision l_y, 
+        GLPrecision l_z, 
+        GLPrecision u_x, 
+        GLPrecision u_y, 
+        GLPrecision u_z)
 {
   ex = e_x;
   ey = e_y;
@@ -139,7 +143,7 @@ int main(int argc, char* argv[]) {
 
   for (size_t i = 0; i < numFrames; i++) {
 
-    CameraPose pose = poses[i]
+    CameraPose pose = poses[i];
     // Setup a camera
     pangolin::OpenGlRenderState s_cam(
         pangolin::ProjectionMatrixRDF_BottomLeft(
