@@ -11,9 +11,9 @@
 
 // added for convenience
 #ifdef HAVE_GLES
-    typedef float GLprecision;
+    typedef float GLPrecision;
 #else
-    typedef double GLprecision;
+    typedef double GLPrecision;
 #endif
 
 class CameraPose{
