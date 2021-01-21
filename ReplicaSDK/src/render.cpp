@@ -157,9 +157,9 @@ int main(int argc, char* argv[]) {
             100.0f),
             //modifying the pose
         pangolin::ModelViewLookAtRDF(
-            poses.ex, poses.ey, poses.ez, 
-            poses.lx, poses.ly, poses.lz,  
-            poses.ux, poses.uy, poses.uz)
+            pose.ex, pose.ey, pose.ez, 
+            pose.lx, pose.ly, pose.lz,  
+            pose.ux, pose.uy, pose.uz)
       );
 
     // Start at some origin
