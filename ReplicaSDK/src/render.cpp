@@ -9,19 +9,36 @@
 //added for safety
 #include <pangolin/display/opengl_render_state.h>
 
+
+
 // added for convenience
 class CameraPose{
 
   public:
-    GLPrecision ex, ey, ez, lx, ly, lz, ux, uy, uz;
-    CameraPose(GLPrecision ex, GLPrecision ey, GLPrecision ez, GLPrecision lx, 
-      GLPrecision ly, GLPrecision lz, GLPrecision ux, GLPrecision uy, GLPrecision uz);
+    pangolin::GLPrecision ex, ey, ez, lx, ly, lz, ux, uy, uz;
+    CameraPose(
+        pangolin::GLPrecision e_x, 
+        pangolin::GLPrecision e_y, 
+        pangolin::GLPrecision e_z, 
+        pangolin::GLPrecision l_x, 
+        pangolin::GLPrecision l_y, 
+        pangolin::GLPrecision l_z, 
+        pangolin::GLPrecision u_x, 
+        pangolin::GLPrecision u_y, 
+        pangolin::GLPrecision u_z);
     
 };
 
-CameraPose::CameraPose(GLPrecision e_x, GLPrecision e_y, GLPrecision e_z, 
-  GLPrecision l_x, GLPrecision l_y, GLPrecision l_z, 
-  GLPrecision u_x, GLPrecision u_y, GLPrecision u_z)
+CameraPose::CameraPose(
+        pangolin::GLPrecision e_x, 
+        pangolin::GLPrecision e_y, 
+        pangolin::GLPrecision e_z, 
+        pangolin::GLPrecision l_x, 
+        pangolin::GLPrecision l_y, 
+        pangolin::GLPrecision l_z, 
+        pangolin::GLPrecision u_x, 
+        pangolin::GLPrecision u_y, 
+        pangolin::GLPrecision u_z)
 {
   ex = e_x;
   ey = e_y;
@@ -118,9 +135,9 @@ int main(int argc, char* argv[]) {
   // beginning modified
 
   std::vector <CameraPose> poses = createPoses(textfile);
-  int numFrames = poses.size();
+  size_t numFrames = poses.size();
 
-  for (int i = 0; i < numFrames; i++) {
+  for (size_t i = 0; i < numFrames; i++) {
 
     CameraPose pose = poses[i]
     // Setup a camera
