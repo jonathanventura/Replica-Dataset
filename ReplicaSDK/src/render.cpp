@@ -186,7 +186,7 @@ int main(int argc, char* argv[]) {
   const int height = 1280;
   bool renderDepth = true;
   float depthScale = 65535.0f * 0.1f;
-  const float renderDistance = 0.5
+  const float renderDistance = 0.5;
 
   // Setup EGL
   EGLCtx egl;
