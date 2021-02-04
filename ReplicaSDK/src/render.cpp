@@ -16,6 +16,15 @@
     typedef double GLPrecision;
 #endif
 
+class InvalidFormatException: public exception
+{
+  virtual const char* what() const throw()
+  {
+    return "The camera poses file is formatted invalidly";
+  }
+} InvalidFormatEx;
+
+
 class CameraPose{
 
   public:
@@ -55,20 +64,83 @@ CameraPose::CameraPose(
   uz = u_z;
 }
 
-std::vector <CameraPose> createPoses(std::string textfile)
+// hold off until format decided
+// void check_valid_line(std::string line){
+
+//   std::string val;
+//   int count, period_count = 0;
+//   std::istringstream iss (line);
+
+//   while(iss >> val)
+//   {
+//     period_count = 0
+//     std::string::const_iterator iter = val.begin();
+//     while (iter != val.end() && (std::isdigit(*iter) || *iter == ".")){
+//             ++iter;
+//             if (*iter == ".") {
+//               ++period_count;
+//               if(period_count)
+//             }
+//     } 
+
+//     ++count;
+//   }
+
+//   if (count != 9){
+//       throw InvalidFormatEx;
+//   }
+// }
+
+// old function
+
+// std::vector <CameraPose> createPoses(std::string textfile)
+// {
+//   std::string line;
+//   GLPrecision ex, ey, ez, lx, ly, lz, ux, uy, uz;
+//   std::vector <CameraPose> poses;
+  
+//   std::ifstream file(textfile);
+  
+//   while (getline(file, line))
+//   {
+
+    
+//     check_valid_line(line);
+
+//     std::istringstream iss (line);
+//     iss >> ex >> ey >> ez >> lx >> ly >> lz >> ux >> uy >> uz;
+//     // assumes poses per line, no error handling atm
+//     poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz, ux, uy, uz)); 
+//   }
+
+//   return poses;
+// }
+
+
+// now assumes origin point,, and orientation is 0 0 1, 
+// might modify to remove orientation entirely, and modify file names
+std::vector <CameraPose> createPoses(std::string textfile, float dist)
 {
   std::string line;
   GLPrecision ex, ey, ez, lx, ly, lz, ux, uy, uz;
   std::vector <CameraPose> poses;
   
   std::ifstream file(textfile);
-  
+
   while (getline(file, line))
   {
+    check_valid_line(line);
     std::istringstream iss (line);
     iss >> ex >> ey >> ez >> lx >> ly >> lz >> ux >> uy >> uz;
     // assumes poses per line, no error handling atm
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz, ux, uy, uz)); 
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly + dist, lz, ux, uy, uz)); 
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly - dist, lz, ux, uy, uz));
+
+    poses.push_back(CameraPose(ex, ey, ez, lx + dist, ly, lz, ux, uy, uz));
+    poses.push_back(CameraPose(ex, ey, ez, lx - dist, ly, lz, ux, uy, uz));
+
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz + dist, ux, uy, uz));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, ux, uy, uz));
   }
 
   return poses;
@@ -111,9 +183,10 @@ int main(int argc, char* argv[]) {
   }
   // end modified
   const int width = 1280;
-  const int height = 960;
+  const int height = 1280;
   bool renderDepth = true;
   float depthScale = 65535.0f * 0.1f;
+  const float renderDistance = 0.5
 
   // Setup EGL
   EGLCtx egl;
@@ -138,7 +211,7 @@ int main(int argc, char* argv[]) {
 
   // beginning modified
 
-  std::vector <CameraPose> poses = createPoses(textfile);
+  std::vector <CameraPose> poses = createPoses(textfile, renderDistance);
   size_t numFrames = poses.size();
 
   for (size_t i = 0; i < numFrames; i++) {
@@ -157,9 +230,9 @@ int main(int argc, char* argv[]) {
             100.0f),
             //modifying the pose
         pangolin::ModelViewLookAtRDF(
-            pose.ex, pose.ey, pose.ez, 
-            pose.lx, pose.ly, pose.lz,  
-            pose.ux, pose.uy, pose.uz)
+            pose.ex, pose.ey, pose.ez, // camera position
+            pose.lx, pose.ly, pose.lz, // where camera is looking at
+            pose.ux, pose.uy, pose.uz) // camera is looking up (010) or down (0-10)
       );
 
     // Start at some origin
