@@ -129,7 +129,7 @@ std::vector <CameraPose> createPoses(std::string textfile, float dist)
 
   while (getline(file, line))
   {
-    check_valid_line(line);
+    //check_valid_line(line);
     std::istringstream iss (line);
     iss >> ex >> ey >> ez >> lx >> ly >> lz >> ux >> uy >> uz;
     // assumes poses per line, no error handling atm
