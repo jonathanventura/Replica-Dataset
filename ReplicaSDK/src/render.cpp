@@ -15,14 +15,14 @@
 #else
     typedef double GLPrecision;
 #endif
-
-class InvalidFormatException: public exception
-{
-  virtual const char* what() const throw()
-  {
-    return "The camera poses file is formatted invalidly";
-  }
-} InvalidFormatEx;
+// handle when file format decided
+// class InvalidFormatException: public exception
+// {
+//   virtual const char* what() const throw()
+//   {
+//     return "The camera poses file is formatted invalidly";
+//   }
+// } InvalidFormatEx;
 
 
 class CameraPose{
