@@ -117,8 +117,7 @@ CameraPose::CameraPose(
 // }
 
 
-// now assumes origin point,, and orientation is 0 0 1, 
-// might modify to remove orientation entirely, and modify file names
+//text file only creates origin pts, 
 std::vector <CameraPose> createPoses(std::string textfile, float dist)
 {
   std::string line;
@@ -126,12 +125,22 @@ std::vector <CameraPose> createPoses(std::string textfile, float dist)
   std::vector <CameraPose> poses;
   
   std::ifstream file(textfile);
+  
+  //modify later
+  ux = 0;
+  uy = 0;
+  uz = 1;
 
   while (getline(file, line))
   {
+
     //check_valid_line(line);
     std::istringstream iss (line);
-    iss >> ex >> ey >> ez >> lx >> ly >> lz >> ux >> uy >> uz;
+    iss >> ex >> ey >> ez;
+    lx = ex;
+    ly = ey;
+    lz = ez;
+
     // assumes poses per line, no error handling atm
     poses.push_back(CameraPose(ex, ey, ez, lx, ly + dist, lz, ux, uy, uz)); 
     poses.push_back(CameraPose(ex, ey, ez, lx, ly - dist, lz, ux, uy, uz));
@@ -139,8 +148,8 @@ std::vector <CameraPose> createPoses(std::string textfile, float dist)
     poses.push_back(CameraPose(ex, ey, ez, lx + dist, ly, lz, ux, uy, uz));
     poses.push_back(CameraPose(ex, ey, ez, lx - dist, ly, lz, ux, uy, uz));
 
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz + dist, ux, uy, uz));
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, ux, uy, uz));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz + dist, ux, uz, uy));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, ux, uz, uy));
   }
 
   return poses;
