@@ -223,6 +223,34 @@ int main(int argc, char* argv[]) {
   std::vector <CameraPose> poses = createPoses(textfile, renderDistance);
   size_t numFrames = poses.size();
 
+
+  //MOVED OUT OF LOOP
+  // And move to the left
+  Eigen::Matrix4d T_new_old = Eigen::Matrix4d::Identity();
+
+  T_new_old.topRightCorner(3, 1) = Eigen::Vector3d(0.025, 0, 0);
+
+  // load mirrors
+  std::vector<MirrorSurface> mirrors;
+  if (surfaceFile.length()) {
+    std::ifstream file(surfaceFile);
+    picojson::value json;
+    picojson::parse(json, file);
+
+    for (size_t i = 0; i < json.size(); i++) {
+      mirrors.emplace_back(json[i]);
+    }
+    std::cout << "Loaded " << mirrors.size() << " mirrors" << std::endl;
+  }
+
+  // load mesh and textures
+  PTexMesh ptexMesh(meshFile, atlasFolder);
+
+  pangolin::ManagedImage<Eigen::Matrix<uint8_t, 3, 1>> image(width, height);
+  pangolin::ManagedImage<float> depthImage(width, height);
+  pangolin::ManagedImage<uint16_t> depthImageInt(width, height);
+
+
   for (size_t i = 0; i < numFrames; i++) {
 
     CameraPose pose = poses[i];
@@ -247,33 +275,10 @@ int main(int argc, char* argv[]) {
     // Start at some origin
     Eigen::Matrix4d T_camera_world = s_cam.GetModelViewMatrix();
 
-    // And move to the left
-    Eigen::Matrix4d T_new_old = Eigen::Matrix4d::Identity();
-
-    T_new_old.topRightCorner(3, 1) = Eigen::Vector3d(0.025, 0, 0);
-
-    // load mirrors
-    std::vector<MirrorSurface> mirrors;
-    if (surfaceFile.length()) {
-      std::ifstream file(surfaceFile);
-      picojson::value json;
-      picojson::parse(json, file);
-
-      for (size_t i = 0; i < json.size(); i++) {
-        mirrors.emplace_back(json[i]);
-      }
-      std::cout << "Loaded " << mirrors.size() << " mirrors" << std::endl;
-    }
+    //MOVED OUT OF LOOP
 
     const std::string shadir = STR(SHADER_DIR);
     MirrorRenderer mirrorRenderer(mirrors, width, height, shadir);
-
-    // load mesh and textures
-    PTexMesh ptexMesh(meshFile, atlasFolder);
-
-    pangolin::ManagedImage<Eigen::Matrix<uint8_t, 3, 1>> image(width, height);
-    pangolin::ManagedImage<float> depthImage(width, height);
-    pangolin::ManagedImage<uint16_t> depthImageInt(width, height);
 
     std::cout << "\rRendering frame " << i + 1 << "/" << numFrames << "... ";
     std::cout.flush();
