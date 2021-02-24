@@ -142,19 +142,30 @@ std::vector <CameraPose> createPoses(std::string textfile, float dist)
     lz = ez;
 
     // assumes poses per line, no error handling atm
+     
     poses.push_back(CameraPose(ex, ey, ez, lx + dist, ly, lz, ux, uy, uz));
     poses.push_back(CameraPose(ex, ey, ez, lx, ly - dist, lz, ux, uy, uz));
 
-    
     poses.push_back(CameraPose(ex, ey, ez, lx - dist, ly, lz, ux, uy, uz));
     poses.push_back(CameraPose(ex, ey, ez, lx, ly + dist, lz, ux, uy, uz));
 
     poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz + dist, ux, uz, uy));
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, uz, uy, ux));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, ux, -uz, uy));
   }
 
   return poses;
 }
+
+
+    // poses.push_back(CameraPose(ex, ey, ez, lx + dist, ly, lz, ux, uy, uz));
+    // poses.push_back(CameraPose(ex, ey, ez, lx, ly - dist, lz, ux, uy, uz));
+
+    
+    // poses.push_back(CameraPose(ex, ey, ez, lx - dist, ly, lz, ux, uy, uz));
+    // poses.push_back(CameraPose(ex, ey, ez, lx, ly + dist, lz, ux, uy, uz));
+
+    // poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz + dist, ux, uz, uy));
+    // poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, ux, -uz, uy));
 // added for convenience
 
 int main(int argc, char* argv[]) {
