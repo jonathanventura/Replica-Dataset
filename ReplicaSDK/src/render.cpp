@@ -8,6 +8,7 @@
 
 //added for safety
 #include <pangolin/display/opengl_render_state.h>
+#include <format.h>
 
 // added for convenience
 #ifdef HAVE_GLES
