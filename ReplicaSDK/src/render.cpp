@@ -112,7 +112,7 @@ std::vector <CameraPose> createPoses(std::string textfile, float dist)
 {
   int cube_num, rand_pos;
   std::string line, filename;
-  GLPrecision ex, ey, ez, ux, uy, uz;
+  GLPrecision ex, ey, ez, lx, ly, lz, ux, uy, uz;
   std::vector <CameraPose> poses;
   std::ifstream file(textfile);
   
