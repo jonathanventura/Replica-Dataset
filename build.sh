@@ -8,11 +8,10 @@ cmake ..
 make -j
 
 
-cd ../fmt
+cd ../../fmt
 mkdir build
 cd build
 cmake ..
-make -j
 
 cd ../../../
 mkdir build

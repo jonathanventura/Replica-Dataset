@@ -15,3 +15,4 @@ set(Pangolin_LIBRARIES "${THIRD_PARTY}/Pangolin/build/src/libpangolin.so")
 find_package(dl REQUIRED)
 
 add_subdirectory("./ReplicaSDK")
+add_subdirectory("./3rdparty/fmt")
