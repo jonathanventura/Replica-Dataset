@@ -7,6 +7,13 @@ cd build
 cmake ..
 make -j
 
+
+cd ../fmt
+mkdir build
+cd build
+cmake ..
+make -j
+
 cd ../../../
 mkdir build
 cd build
