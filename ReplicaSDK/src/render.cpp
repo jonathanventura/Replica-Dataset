@@ -79,7 +79,7 @@ void generate_randomPoses(std::vector <CameraPose> &poses,
   for(int i=7; i<(7+num_poses); i++){
       poses.push_back(
         CameraPose(ex + rand_float(), ey + rand_float(), ez + rand_float(), 
-                   ex + rand_float(), ey + rand_float(), ez + rand_float(),, 
+                   ex + rand_float(), ey + rand_float(), ez + rand_float(), 
                    0, 0, 1, std::format("{}_{:02}", filename,i))
       );
   }
