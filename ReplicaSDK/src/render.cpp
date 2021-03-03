@@ -69,11 +69,11 @@ CameraPose::CameraPose(
 } 
 
 float rand_float(){
-  return (((float)rand()) / RAND_MAX)*2) -1;
+  return ((((float)rand()) / RAND_MAX)*2) -1;
 }
   
 void generate_randomPoses(std::vector <CameraPose> &poses,
-                          int num_poses, std::string filename
+                          int num_poses, std::string filename,
                           int ex, int ey, int ez) {
 
   for(int i=7; i<(7+num_poses); i++){
@@ -84,26 +84,46 @@ void generate_randomPoses(std::vector <CameraPose> &poses,
       );
   }
     
+}
+
+//creates a json file per string. 
+void generate_json(CameraPose pose){
+
+  std::string json_string, filename_string;
+
+  filename_string = std::format("{}_json.txt", pose.filename);
+
+  json_string = std::format("{eye:[{},{},{}],target:[{},{},{}],up[{},{},{}]}",
+                             pose.ex, pose.ey, pose.ez, 
+                             pose.lx, pose.ly, pose.lz,
+                             pose.ux, pose.uy, pose.uz);
+
+  std::ofstream json_file(json_string);
+
+  json_file << json_string;
+
+  json_file.close();
 
 }
+
 //cube_##_##_depth
 //cube_##_##_frame
 std::vector <CameraPose> createPoses(std::string textfile, float dist)
 {
   int cube_num, rand_pos;
   std::string line, filename;
-  GLPrecision ex, ey, ez, lx, ly, lz, ux, uy, uz;
+  GLPrecision ex, ey, ez, ux, uy, uz;
   std::vector <CameraPose> poses;
   std::ifstream file(textfile);
   
   //constant
-  rand_pos = 10
+  rand_pos = 10;
   //modify later
   ux = 0;
   uy = 0;
   uz = 1;
 
-  cube_num = 0
+  cube_num = 0;
 
   while (getline(file, line))
   {
@@ -323,6 +343,8 @@ int main(int argc, char* argv[]) {
           pangolin::PixelFormatFromString("GRAY16LE"),
           cur_file, true, 34.0f);
     }
+
+    generate_json(pose);
 
     // Move the camera
     T_camera_world = T_camera_world * T_new_old.inverse();
