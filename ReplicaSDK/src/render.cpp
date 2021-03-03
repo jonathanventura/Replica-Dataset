@@ -8,7 +8,7 @@
 
 //added for safety
 #include <pangolin/display/opengl_render_state.h>
-#include <format>
+#include <fmt/core.h>
 
 // added for convenience
 #ifdef HAVE_GLES
@@ -81,7 +81,7 @@ void generate_randomPoses(std::vector <CameraPose> &poses,
       poses.push_back(
         CameraPose(ex + rand_float(), ey + rand_float(), ez + rand_float(), 
                    ex + rand_float(), ey + rand_float(), ez + rand_float(), 
-                   0, 0, 1, std::format("{}_{:02}", filename,i))
+                   0, 0, 1, fmt::format("{}_{:02}", filename,i))
       );
   }
     
@@ -92,9 +92,9 @@ void generate_json(CameraPose pose){
 
   std::string json_string, filename_string;
 
-  filename_string = std::format("{}_json.txt", pose.filename);
+  filename_string = fmt::format("{}_json.txt", pose.filename);
 
-  json_string = std::format("{eye:[{},{},{}],target:[{},{},{}],up[{},{},{}]}",
+  json_string = fmt::format("{eye:[{},{},{}],target:[{},{},{}],up[{},{},{}]}",
                              pose.ex, pose.ey, pose.ez, 
                              pose.lx, pose.ly, pose.lz,
                              pose.ux, pose.uy, pose.uz);
@@ -135,18 +135,18 @@ std::vector <CameraPose> createPoses(std::string textfile, float dist)
     ly = ey;
     lz = ez;
 
-    filename = std::format("cube_{:02}", cube_num);
+    filename = fmt::format("cube_{:02}", cube_num);
 
     // assumes poses per line, no error handling atm
     
-    poses.push_back(CameraPose(ex, ey, ez, lx + dist, ly, lz, ux, uy, uz, std::format("{}_{}", filename,"01"));
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly - dist, lz, ux, uy, uz, std::format("{}_{}", filename,"02"));
+    poses.push_back(CameraPose(ex, ey, ez, lx + dist, ly, lz, ux, uy, uz, fmt::format("{}_{}", filename,"01"));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly - dist, lz, ux, uy, uz, fmt::format("{}_{}", filename,"02"));
 
-    poses.push_back(CameraPose(ex, ey, ez, lx - dist, ly, lz, ux, uy, uz, std::format("{}_{}", filename,"03"));
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly + dist, lz, ux, uy, uz, std::format("{}_{}", filename,"04"));
+    poses.push_back(CameraPose(ex, ey, ez, lx - dist, ly, lz, ux, uy, uz, fmt::format("{}_{}", filename,"03"));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly + dist, lz, ux, uy, uz, fmt::format("{}_{}", filename,"04"));
 
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz + dist, ux, uz, uy, std::format("{}_{}", filename,"05"));
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, ux, -uz, uy, std::format("{}_{}", filename,"06"));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz + dist, ux, uz, uy, fmt::format("{}_{}", filename,"05"));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, ux, -uz, uy, fmt::format("{}_{}", filename,"06"));
 
     generate_randomPoses(poses, rand_pos, filename, ex, ey, ez);
 
@@ -306,7 +306,7 @@ int main(int argc, char* argv[]) {
     // char filename[1000];
     // snprintf(filename, 1000, "frame%06zu.png", i);
     std::string cur_file;
-    cur_file = std::format("{}_frame.png",pose.filename);
+    cur_file = fmt::format("{}_frame.png",pose.filename);
 
     pangolin::SaveImage(
         image.UnsafeReinterpret<uint8_t>(),
@@ -336,7 +336,7 @@ int main(int argc, char* argv[]) {
           depthImageInt[i] = static_cast<uint16_t>(depthImage[i] + 0.5f);
 
 
-      cur_file = std::format("{}_depth.png",pose.filename);
+      cur_file = fmt::format("{}_depth.png",pose.filename);
 
       //snprintf(filename, 1000, "depth%06zu.png", i);
       pangolin::SaveImage(
