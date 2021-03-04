@@ -94,7 +94,7 @@ void generate_json(CameraPose pose){
 
   filename_string = fmt::format("{}_json.txt", pose.filename);
 
-  json_string = fmt::format("{eye:[{},{},{}],target:[{},{},{}],up[{},{},{}]}",
+  json_string = fmt::format("{{eye:[{},{},{}],target:[{},{},{}],up[{},{},{}]}}",
                              pose.ex, pose.ey, pose.ez, 
                              pose.lx, pose.ly, pose.lz,
                              pose.ux, pose.uy, pose.uz);
