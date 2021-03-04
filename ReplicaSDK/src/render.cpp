@@ -101,7 +101,7 @@ void generate_json(CameraPose pose){
 
   std::ofstream json_file(json_string);
 
-  json_file << json_string;
+  json_file << json_string << std::endl;
 
   json_file.close();
 
