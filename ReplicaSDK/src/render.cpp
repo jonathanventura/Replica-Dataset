@@ -139,14 +139,14 @@ std::vector <CameraPose> createPoses(std::string textfile, float dist)
 
     // assumes poses per line, no error handling atm
     
-    poses.push_back(CameraPose(ex, ey, ez, lx + dist, ly, lz, ux, uy, uz, fmt::format("{}_{}", filename,"01"));
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly - dist, lz, ux, uy, uz, fmt::format("{}_{}", filename,"02"));
+    poses.push_back(CameraPose(ex, ey, ez, lx + dist, ly, lz, ux, uy, uz, fmt::format("{}_{}", filename,"01")));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly - dist, lz, ux, uy, uz, fmt::format("{}_{}", filename,"02")));
 
-    poses.push_back(CameraPose(ex, ey, ez, lx - dist, ly, lz, ux, uy, uz, fmt::format("{}_{}", filename,"03"));
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly + dist, lz, ux, uy, uz, fmt::format("{}_{}", filename,"04"));
+    poses.push_back(CameraPose(ex, ey, ez, lx - dist, ly, lz, ux, uy, uz, fmt::format("{}_{}", filename,"03")));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly + dist, lz, ux, uy, uz, fmt::format("{}_{}", filename,"04")));
 
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz + dist, ux, uz, uy, fmt::format("{}_{}", filename,"05"));
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, ux, -uz, uy, fmt::format("{}_{}", filename,"06"));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz + dist, ux, uz, uy, fmt::format("{}_{}", filename,"05")));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, ux, -uz, uy, fmt::format("{}_{}", filename,"06")));
 
     generate_randomPoses(poses, rand_pos, filename, ex, ey, ez);
 
