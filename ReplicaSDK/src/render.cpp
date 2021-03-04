@@ -99,7 +99,7 @@ void generate_json(CameraPose pose){
                              pose.lx, pose.ly, pose.lz,
                              pose.ux, pose.uy, pose.uz);
 
-  std::ofstream json_file(json_string);
+  std::ofstream json_file(filename_string);
 
   json_file << json_string << std::endl;
 
