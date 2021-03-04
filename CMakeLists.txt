@@ -12,7 +12,9 @@ set(Pangolin_INCLUDE_DIRS "${THIRD_PARTY}/Pangolin/build/src/include")
 list(APPEND Pangolin_INCLUDE_DIRS "${THIRD_PARTY}/Pangolin/include") 
 set(Pangolin_LIBRARIES "${THIRD_PARTY}/Pangolin/build/src/libpangolin.so") 
 
+set(fmt_INCLUDE_DIRS "${THIRD_PARTY}/fmt/include")
+set(fmt_LIBRARIES "${THIRD_PARTY}/fmt/build/libfmt.a") 
+
 find_package(dl REQUIRED)
 
 add_subdirectory("./ReplicaSDK")
-add_subdirectory("./fmt")

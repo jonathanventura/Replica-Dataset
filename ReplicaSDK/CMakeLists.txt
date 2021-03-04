@@ -20,12 +20,14 @@ add_library(ptex SHARED
 target_link_libraries(ptex
                       ${Eigen_LIBRARIES}
                       ${Pangolin_LIBRARIES}
+                      ${fmt_LIBRARIES}
                       ${dl_LIBRARIES}
                       stdc++fs
 )
 target_include_directories(ptex PUBLIC
             ${Pangolin_INCLUDE_DIRS}
             ${Eigen_INCLUDE_DIRS}
+            ${fmt_INCLUDE_DIRS}
             ${dl_INCLUDE_DIRS}
             ${CMAKE_CURRENT_LIST_DIR}
 )
@@ -39,6 +41,7 @@ add_executable(ReplicaViewer src/viewer.cpp src/MirrorSurface.cpp)
 
 target_link_libraries(ReplicaViewer
                       ${Pangolin_LIBRARIES}
+                      ${fmt_LIBRARIES}
                       ${dl_LIBRARIES}
                       GL
                       GLEW
@@ -50,6 +53,7 @@ add_executable(ReplicaRenderer src/render.cpp src/MirrorSurface.cpp)
 
 target_link_libraries(ReplicaRenderer
                       ${Pangolin_LIBRARIES}
+                      ${fmt_LIBRARIES}
                       ${dl_LIBRARIES}
                       GL
                       GLEW
