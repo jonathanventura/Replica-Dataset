@@ -30,6 +30,7 @@ class CameraPose{
 
   public:
     GLPrecision ex, ey, ez, lx, ly, lz, ux, uy, uz;
+    float exposure, gamma;
     std::string filename;
     CameraPose(
         GLPrecision e_x, 
@@ -55,6 +56,8 @@ CameraPose::CameraPose(
         GLPrecision u_x, 
         GLPrecision u_y, 
         GLPrecision u_z,
+        float exp,
+        float gam,
         std::string file_name)
 {
   ex = e_x;
@@ -66,22 +69,26 @@ CameraPose::CameraPose(
   ux = u_x;
   uy = u_y;
   uz = u_z;
+  exposure = exp;
+  gamma = gam;
   filename = file_name;
 } 
 
 float rand_float(){
-  return ((((float)rand()) / RAND_MAX)*2) -1;
+   // values will be between +/- 1/control_factor
+  float control_factor = 1;
+  return (((((float)rand()) / RAND_MAX)*2) -1)/control_factor;
 }
   
 void generate_randomPoses(std::vector <CameraPose> &poses,
                           int num_poses, std::string filename,
-                          int ex, int ey, int ez) {
-
+                          int ex, int ey, int ez, float exp, float gam) {
+  float ez_control_factor = 5;                          
   for(int i=7; i<(7+num_poses); i++){
       poses.push_back(
-        CameraPose(ex + rand_float(), ey + rand_float(), ez + rand_float(), 
-                   ex + rand_float(), ey + rand_float(), ez + rand_float(), 
-                   0, 0, 1, fmt::format("{}_{:02}", filename,i))
+        CameraPose(ex + rand_float(), ey + rand_float(), ez, //fixed
+                   ex + rand_float(), ey + rand_float(), ez + (rand_float()/ez_control_factor), 
+                   0, 0, 1, exp, gam, fmt::format("{}_{:02}", filename,i))
       );
   }
     
@@ -94,7 +101,7 @@ void generate_json(CameraPose pose){
 
   filename_string = fmt::format("{}.json", pose.filename);
 
-  json_string = fmt::format("{{\"eye\":[{},{},{}],\"target\":[{},{},{}],\"up\":[{},{},{}]}}",
+  json_string = fmt::format("{{\"eye\":[{},{},{}],\"target\":[{},{},{}],\"up\"po:[{},{},{}]}}",
                              pose.ex, pose.ey, pose.ez, 
                              pose.lx, pose.ly, pose.lz,
                              pose.ux, pose.uy, pose.uz);
@@ -114,6 +121,7 @@ std::vector <CameraPose> createPoses(std::string textfile, float dist)
   int cube_num, rand_pos;
   std::string line, filename;
   GLPrecision ex, ey, ez, lx, ly, lz, ux, uy, uz;
+  float exp, gam;
   std::vector <CameraPose> poses;
   std::ifstream file(textfile);
   
@@ -130,7 +138,9 @@ std::vector <CameraPose> createPoses(std::string textfile, float dist)
   {
     //check_valid_line(line);
     std::istringstream iss (line);
-    iss >> ex >> ey >> ez;
+    exp = 0;
+    gam = 0;
+    iss >> ex >> ey >> ez >> exp >> gam;
     lx = ex;
     ly = ey;
     lz = ez;
@@ -139,16 +149,16 @@ std::vector <CameraPose> createPoses(std::string textfile, float dist)
 
     // assumes poses per line, no error handling atm
     
-    poses.push_back(CameraPose(ex, ey, ez, lx + dist, ly, lz, ux, uy, uz, fmt::format("{}_{}", filename,"01")));
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly - dist, lz, ux, uy, uz, fmt::format("{}_{}", filename,"02")));
+    poses.push_back(CameraPose(ex, ey, ez, lx + dist, ly, lz, ux, uy, uz, exp, gam, fmt::format("{}_{}", filename,"01")));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly - dist, lz, ux, uy, uz, exp, gam, fmt::format("{}_{}", filename,"02")));
 
-    poses.push_back(CameraPose(ex, ey, ez, lx - dist, ly, lz, ux, uy, uz, fmt::format("{}_{}", filename,"03")));
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly + dist, lz, ux, uy, uz, fmt::format("{}_{}", filename,"04")));
+    poses.push_back(CameraPose(ex, ey, ez, lx - dist, ly, lz, ux, uy, uz, exp, gam, fmt::format("{}_{}", filename,"03")));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly + dist, lz, ux, uy, uz, exp, gam, fmt::format("{}_{}", filename,"04")));
 
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz + dist, ux, uz, uy, fmt::format("{}_{}", filename,"05")));
-    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, ux, -uz, uy, fmt::format("{}_{}", filename,"06")));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz + dist, ux, uz, uy, exp, gam, fmt::format("{}_{}", filename,"05")));
+    poses.push_back(CameraPose(ex, ey, ez, lx, ly, lz - dist, ux, -uz, uy, exp, gam, fmt::format("{}_{}", filename,"06")));
 
-    generate_randomPoses(poses, rand_pos, filename, ex, ey, ez);
+    generate_randomPoses(poses, rand_pos, filename, ex, ey, ez, exp, gam);
 
     ++cube_num;
   }
@@ -177,8 +187,8 @@ int main(int argc, char* argv[]) {
     ASSERT(pangolin::FileExists(surfaceFile));
   }
   // end modified
-  const int width = 1280;
-  const int height = 1280;
+  const int width = 1024;
+  const int height = 1024;
   bool renderDepth = true;
   float depthScale = 65535.0f * 0.1f;
   const float renderDistance = 0.5;
@@ -232,6 +242,9 @@ int main(int argc, char* argv[]) {
   // load mesh and textures
   PTexMesh ptexMesh(meshFile, atlasFolder);
 
+  float originalExposure = ptexMesh.Exposure();
+  float originalGamma = ptexMesh.Gamma();
+
   pangolin::ManagedImage<Eigen::Matrix<uint8_t, 3, 1>> image(width, height);
   pangolin::ManagedImage<float> depthImage(width, height);
   pangolin::ManagedImage<uint16_t> depthImageInt(width, height);
@@ -240,6 +253,22 @@ int main(int argc, char* argv[]) {
   for (size_t i = 0; i < numFrames; i++) {
 
     CameraPose pose = poses[i];
+
+    if (pose.exposure){
+      ptexMesh.SetExposure(pose.exposure);
+    }
+    else{
+      ptexMesh.SetExposure(originalExposure);
+    }
+
+    if pose.gamma(){
+      ptexMesh.SetGamma(pose.gamma);
+    }
+    else {
+      ptexMesh.SetGamma(originalGamma);  
+    }
+    
+    
     // Setup a camera
     pangolin::OpenGlRenderState s_cam(
         pangolin::ProjectionMatrixRDF_BottomLeft(
