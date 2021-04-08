@@ -257,14 +257,14 @@ int main(int argc, char* argv[]) {
     CameraPose pose = poses[i];
 
     if (pose.exposure){
-      ptexMesh.SetExposure(pose.exposure);
+      ptexMesh.SetExposure(originalExposure + pose.exposure);
     }
     else{
       ptexMesh.SetExposure(originalExposure);
     }
 
     if (pose.gamma){
-      ptexMesh.SetGamma(pose.gamma);
+      ptexMesh.SetGamma(originalGamma + pose.gamma);
     }
     else {
       ptexMesh.SetGamma(originalGamma);  
