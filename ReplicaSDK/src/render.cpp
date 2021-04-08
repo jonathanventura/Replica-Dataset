@@ -42,6 +42,8 @@ class CameraPose{
         GLPrecision u_x, 
         GLPrecision u_y, 
         GLPrecision u_z,
+        float exp,
+        float gam,
         std::string file_name);
     
 };
@@ -261,7 +263,7 @@ int main(int argc, char* argv[]) {
       ptexMesh.SetExposure(originalExposure);
     }
 
-    if pose.gamma(){
+    if (pose.gamma){
       ptexMesh.SetGamma(pose.gamma);
     }
     else {
