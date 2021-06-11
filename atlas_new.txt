@@ -1,0 +1,4 @@
+office_3
+office_4
+hotel_0
+room_1
